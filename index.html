@@ -1685,6 +1685,12 @@
                 if (e.key === 'Enter') checkAnswer();
             });
         })();
+        // ═══════════════════════════════
+        //  VIDEO COMPLETION REDIRECT
+        // ═══════════════════════════════
+        document.getElementById('teAmoVideo').addEventListener('ended', () => {
+            window.location.href = 'carta.html';
+        });
     </script>
 </body>
 
