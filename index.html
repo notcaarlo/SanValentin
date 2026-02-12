@@ -1,1175 +1,1690 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️</title>
+    <title>???</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
-        * {
+        /* ═══════════════════════════════════════
+           RESET & BASE
+           ═══════════════════════════════════════ */
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html,
         body {
-            font-family: 'Quicksand', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            color: #111;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #FFDAE9;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            padding: 24px;
-            position: relative;
+            background: #0a0a0a;
+            color: #c8c8c8;
+            font-family: 'Special Elite', monospace;
         }
 
-        /* ─── Floating hearts background ─── */
-        .floating-hearts {
+        /* ═══════════════════════════════════════
+           VHS STATIC OVERLAY (always on top)
+           ═══════════════════════════════════════ */
+        .vhs-overlay {
             position: fixed;
             inset: 0;
+            z-index: 9999;
             pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+            opacity: 0.06;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.03) 2px,
+                    rgba(255, 255, 255, 0.03) 4px);
+            animation: vhsScanlines 0.1s linear infinite;
         }
 
-        .floating-heart {
+        .vhs-overlay::before {
+            content: '';
             position: absolute;
-            bottom: -40px;
-            opacity: 0;
-            animation: floatUp linear infinite;
-            font-size: 20px;
-            filter: drop-shadow(0 0 4px rgba(255, 105, 135, 0.3));
+            inset: 0;
+            background: linear-gradient(transparent 0%,
+                    rgba(255, 255, 255, 0.02) 50%,
+                    transparent 100%);
+            animation: vhsScan 8s linear infinite;
         }
 
-        @keyframes floatUp {
+        @keyframes vhsScanlines {
             0% {
-                opacity: 0;
-                transform: translateY(0) rotate(0deg) scale(0.5);
-            }
-
-            10% {
-                opacity: 0.7;
-            }
-
-            90% {
-                opacity: 0.4;
+                background-position: 0 0;
             }
 
             100% {
-                opacity: 0;
-                transform: translateY(-110vh) rotate(25deg) scale(1.1);
+                background-position: 0 4px;
             }
         }
 
-        /* ─── Envelope stage ─── */
-        #envelopeStage {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+        @keyframes vhsScan {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           SCREEN FLICKER
+           ═══════════════════════════════════════ */
+        .screen-flicker {
+            animation: flicker 0.15s ease-in-out;
+        }
+
+        @keyframes flicker {
+            0% {
+                opacity: 1;
+            }
+
+            10% {
+                opacity: 0.3;
+            }
+
+            20% {
+                opacity: 0.8;
+            }
+
+            30% {
+                opacity: 0.1;
+            }
+
+            40% {
+                opacity: 0.9;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+
+            60% {
+                opacity: 0.85;
+            }
+
+            70% {
+                opacity: 0.4;
+            }
+
+            80% {
+                opacity: 0.95;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .screen-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translate(0);
+            }
+
+            10% {
+                transform: translate(-5px, 3px);
+            }
+
+            20% {
+                transform: translate(4px, -2px);
+            }
+
+            30% {
+                transform: translate(-3px, -4px);
+            }
+
+            40% {
+                transform: translate(5px, 2px);
+            }
+
+            50% {
+                transform: translate(-2px, 5px);
+            }
+
+            60% {
+                transform: translate(3px, -3px);
+            }
+
+            70% {
+                transform: translate(-4px, 1px);
+            }
+
+            80% {
+                transform: translate(2px, -5px);
+            }
+
+            90% {
+                transform: translate(-1px, 4px);
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           GLITCH TEXT EFFECT
+           ═══════════════════════════════════════ */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-text::before {
+            color: #ff0040;
+            animation: glitch1 2s infinite linear alternate-reverse;
+            clip-path: inset(20% 0 60% 0);
+        }
+
+        .glitch-text::after {
+            color: #00ffff;
+            animation: glitch2 3s infinite linear alternate-reverse;
+            clip-path: inset(60% 0 10% 0);
+        }
+
+        @keyframes glitch1 {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-3px, 2px);
+            }
+
+            40% {
+                transform: translate(2px, -1px);
+            }
+
+            60% {
+                transform: translate(-1px, 3px);
+            }
+
+            80% {
+                transform: translate(3px, -2px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        @keyframes glitch2 {
+            0% {
+                transform: translate(0);
+            }
+
+            25% {
+                transform: translate(2px, 1px);
+            }
+
+            50% {
+                transform: translate(-3px, -2px);
+            }
+
+            75% {
+                transform: translate(1px, 3px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           PHASES — SHARED
+           ═══════════════════════════════════════ */
+        .phase {
             position: fixed;
             inset: 0;
-            z-index: 10;
-        }
-
-        body.show-modal .container {
-            display: flex;
-        }
-
-        .container {
-            display: none;
-            flex-direction: column;
-            text-align: center;
-            background: white;
-            padding: 40px 36px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-            width: fit-content;
-            max-width: min(650px, calc(100vw - 48px));
-            min-width: 0;
-            min-height: 520px;
-            max-height: calc(100vh - 48px);
-            overflow-y: auto;
-            position: relative;
-            transform-origin: center center;
-            transition: opacity 0.25s ease, transform 0.3s ease;
-            z-index: 5;
-        }
-
-        .modal-inner {
-            flex: 1 1 auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            min-height: 0;
-            width: fit-content;
-            max-width: 100%;
-        }
-
-        .modal-view {
-            width: fit-content;
-            max-width: 100%;
+            justify-content: center;
+            padding: 24px;
             opacity: 0;
-            transition: opacity 0.25s ease;
-            display: none;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0s 0.8s;
         }
 
-        .modal-view.visible {
-            display: block;
+        .phase.active {
             opacity: 1;
+            visibility: visible;
+            transition: opacity 0.8s ease, visibility 0s 0s;
         }
 
-        /* ─── Envelope ─── */
-        .envelope-wrapper {
+        /* ═══════════════════════════════════════
+           PHASE 1 — CORRUPTED INTRO
+           ═══════════════════════════════════════ */
+        #phase1 {
+            background: #0a0a0a;
+        }
+
+        .static-noise {
+            position: absolute;
+            inset: 0;
+            opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+            background-size: 256px 256px;
+            animation: noiseMove 0.2s steps(4) infinite;
+        }
+
+        @keyframes noiseMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            25% {
+                transform: translate(-10px, 5px);
+            }
+
+            50% {
+                transform: translate(5px, -10px);
+            }
+
+            75% {
+                transform: translate(-5px, -5px);
+            }
+
+            100% {
+                transform: translate(10px, 10px);
+            }
+        }
+
+        .intro-text {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(20px, 5vw, 36px);
+            color: #8b0000;
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.5), 0 0 40px rgba(139, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+            min-height: 3em;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #8b0000;
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: cursorBlink 0.7s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .start-btn {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(18px, 4vw, 28px);
+            color: #8b0000;
+            background: transparent;
+            border: 2px solid #8b0000;
+            padding: 14px 40px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            margin-top: 40px;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .start-btn.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .start-btn:hover {
+            background: rgba(139, 0, 0, 0.15);
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.3), inset 0 0 20px rgba(139, 0, 0, 0.1);
+            text-shadow: 0 0 8px rgba(139, 0, 0, 0.6);
+        }
+
+        /* ═══════════════════════════════════════
+           PHASE 2 — THE RITUAL (Candle Puzzle)
+           ═══════════════════════════════════════ */
+        #phase2 {
+            background: radial-gradient(ellipse at center bottom, #1a0a00 0%, #0a0a0a 70%);
+        }
+
+        .candle-container {
+            position: relative;
+            width: 60px;
+            height: 200px;
+            margin-bottom: 30px;
+        }
+
+        .candle-body {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 140px;
+            background: linear-gradient(to right, #d4c4a0, #f0e6d0, #d4c4a0);
+            border-radius: 4px 4px 2px 2px;
+            box-shadow: 0 0 15px rgba(255, 160, 60, 0.15);
+        }
+
+        .candle-body::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: #333;
+        }
+
+        /* Dripping wax */
+        .candle-body::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -3px;
+            right: -3px;
+            height: 20px;
+            background: radial-gradient(ellipse at 20% 0%, #f0e6d0 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 0%, #e8dcc0 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 0%, #f0e6d0 0%, transparent 60%);
+            border-radius: 0 0 50% 50%;
+        }
+
+        .flame-wrap {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 50px;
+        }
+
+        .flame {
+            width: 20px;
+            height: 40px;
+            margin: 0 auto;
+            background: radial-gradient(ellipse at 50% 90%, #fff5a0 0%, #ffaa00 30%, #ff4400 60%, transparent 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flameFlicker 0.3s ease-in-out infinite alternate;
+            filter: blur(1px);
+            box-shadow: 0 0 20px rgba(255, 160, 60, 0.6), 0 0 60px rgba(255, 100, 20, 0.3), 0 0 100px rgba(255, 60, 0, 0.1);
+        }
+
+        .flame.flare {
+            animation: flameFlare 1.5s ease-out;
+        }
+
+        @keyframes flameFlicker {
+            0% {
+                transform: scaleX(1) scaleY(1) rotate(-1deg);
+            }
+
+            33% {
+                transform: scaleX(0.9) scaleY(1.05) rotate(1deg);
+            }
+
+            66% {
+                transform: scaleX(1.05) scaleY(0.95) rotate(-0.5deg);
+            }
+
+            100% {
+                transform: scaleX(0.95) scaleY(1.02) rotate(0.5deg);
+            }
+        }
+
+        @keyframes flameFlare {
+            0% {
+                transform: scaleX(1) scaleY(1);
+                filter: blur(1px);
+            }
+
+            30% {
+                transform: scaleX(2) scaleY(2.5);
+                filter: blur(3px);
+                box-shadow: 0 0 60px rgba(255, 160, 60, 0.9), 0 0 120px rgba(255, 100, 20, 0.6);
+            }
+
+            100% {
+                transform: scaleX(1) scaleY(1);
+                filter: blur(1px);
+            }
+        }
+
+        .candle-glow {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 160, 60, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .riddle-text {
+            font-family: 'Special Elite', monospace;
+            font-size: clamp(16px, 3.5vw, 22px);
+            color: #b8a080;
+            text-align: center;
+            max-width: 500px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-shadow: 0 0 8px rgba(255, 160, 60, 0.15);
+        }
+
+        .riddle-text em {
+            font-style: italic;
+            color: #d4a060;
+        }
+
+        .input-group {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 16px;
         }
 
-        .envelope {
-            position: relative;
-            width: 220px;
-            height: 160px;
-            background: #f5e6d3;
-            border: 1px solid #d4c4a8;
-            border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-            cursor: pointer;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
-            animation: envelopeWiggle 2.5s ease-in-out infinite;
-        }
-
-        @keyframes envelopeWiggle {
-
-            0%,
-            100% {
-                transform: rotate(0deg);
-            }
-
-            20% {
-                transform: rotate(-3deg);
-            }
-
-            40% {
-                transform: rotate(3deg);
-            }
-
-            60% {
-                transform: rotate(-2deg);
-            }
-
-            80% {
-                transform: rotate(1deg);
-            }
-        }
-
-        .envelope:hover:not(.opening) {
-            animation: none;
-            transform: scale(1.08);
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
-        }
-
-        .envelope.opening {
-            animation: none;
-        }
-
-        .envelope-tap-hint {
-            font-family: 'Quicksand', sans-serif;
-            font-size: 14px;
-            color: rgba(0, 0, 0, 0.45);
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            animation: tapPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes tapPulse {
-
-            0%,
-            100% {
-                opacity: 0.45;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.8;
-                transform: scale(1.04);
-            }
-        }
-
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(165deg, #e8d5c4 0%, #d4c4a8 45%, #c9b89a 100%);
-            clip-path: polygon(0 0, 50% 50%, 100% 0);
-            transform-origin: top center;
-            transition: transform 0.8s cubic-bezier(0.34, 1.2, 0.64, 1);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .envelope-flap-outline {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .envelope-flap-outline line {
-            vector-effect: non-scaling-stroke;
-        }
-
-        .envelope.opening .envelope-flap {
-            transform: rotateX(-170deg);
-        }
-
-        .envelope-heart {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            color: #c41e3a;
-            pointer-events: none;
-            z-index: 1;
-            transition: opacity 0.35s ease;
-        }
-
-        .envelope-heart.hidden {
-            opacity: 0;
-        }
-
-        .envelope-heart svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .envelope {
-                width: 300px;
-                height: 218px;
-            }
-
-            .envelope-heart {
-                width: 52px;
-                height: 52px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .envelope {
-                width: 340px;
-                height: 247px;
-            }
-
-            .envelope-heart {
-                width: 58px;
-                height: 58px;
-            }
-        }
-
-        .envelope-stage-fade-out {
-            animation: envelopeFadeOut 0.5s ease forwards;
-        }
-
-        .puzzle-stage-fade-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @keyframes envelopeFadeOut {
-            to {
-                opacity: 0;
-                transform: scale(0.96);
-            }
-        }
-
-        /* ─── Puzzle Title ─── */
-        .modal-view .modal-title {
-            font-family: 'Great Vibes', cursive;
-            font-size: 32px;
-            color: #c41e3a;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-top: 8px;
-            margin-bottom: 24px;
-            min-height: 1.4em;
-        }
-
-        .typewriter-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1em;
-            background: #c41e3a;
-            margin-left: 2px;
-            vertical-align: text-bottom;
-            animation: blink 0.7s step-end infinite;
-        }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        /* ─── Puzzle container ─── */
-        .puzzle-container {
-            width: 40vh;
-            max-width: 100%;
-            margin: 0 auto;
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 14px;
-            transition: background 0.4s ease;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-        }
-
-        .puzzle-container.completed {
-            background: #fff;
-        }
-
-        .puzzle-grid-wrap {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1;
-            margin: 0 auto;
-            transition: transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
-        }
-
-        .puzzle-grid-wrap.revealing {
-            transform: scale(0.88);
-            transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-        }
-
-        .puzzle-grid {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .puzzle-grid.merging .puzzle-tile {
-            box-shadow: none;
-            border-radius: 0;
-        }
-
-        /* ─── Puzzle tiles (absolutely positioned for smooth animation) ─── */
-        .puzzle-tile {
-            position: absolute;
-            width: calc(33.333% - 1.33px);
-            height: calc(33.333% - 1.33px);
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: left 0.25s cubic-bezier(0.34, 1.2, 0.64, 1),
-                top 0.25s cubic-bezier(0.34, 1.2, 0.64, 1),
-                box-shadow 0.15s ease,
-                border-radius 0.15s ease,
-                transform 0.15s ease;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
-        }
-
-        .puzzle-tile:hover:not(.empty) {
-            transform: scale(1.03);
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        .puzzle-tile.empty {
-            box-shadow: none;
-            cursor: default;
-            background: transparent !important;
-        }
-
-        .puzzle-tile.empty:hover {
-            transform: none;
-        }
-
-        /* ─── Full image overlay ─── */
-        .puzzle-full-image-overlay {
-            position: absolute;
-            inset: 0;
-            border-radius: 8px;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-            pointer-events: none;
-            z-index: 20;
-        }
-
-        .puzzle-full-image-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .puzzle-full-image-overlay img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* ─── Puzzle toolbar (counter + hint) ─── */
-        .puzzle-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            padding: 0 4px;
-        }
-
-        .move-counter {
-            font-size: 14px;
-            color: #888;
-            font-weight: 500;
-        }
-
-        .hint-btn {
-            background: none;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-            padding: 6px 14px;
-            font-size: 13px;
-            color: #888;
-            cursor: pointer;
-            font-family: inherit;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        .hint-btn:hover {
-            background: rgba(0, 0, 0, 0.04);
-            color: #555;
-            border-color: rgba(0, 0, 0, 0.15);
-        }
-
-        .hint-btn:disabled {
-            opacity: 0.4;
-            cursor: default;
-        }
-
-        /* ─── Reveal text ─── */
-        .puzzle-reveal-text {
-            opacity: 0;
-            transition: opacity 0.35s ease 0.1s;
-            margin-top: 20px;
-        }
-
-        .puzzle-reveal-text.show {
-            opacity: 1;
-        }
-
-        .puzzle-reveal-text .complete-line {
-            font-family: 'Great Vibes', cursive;
-            font-size: 22px;
-            color: #c41e3a;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .puzzle-reveal-text .valentine-question {
-            font-family: 'Great Vibes', cursive;
-            font-size: 24px;
-            color: #c41e3a;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        /* ─── Shuffle button (unused but kept) ─── */
-        .shuffle-button {
-            margin-top: 20px;
-            padding: 10px 25px;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
+        .arg-input {
+            font-family: 'Special Elite', monospace;
+            font-size: 20px;
+            background: transparent;
             border: none;
-            border-radius: 25px;
-            font-size: 1em;
+            border-bottom: 2px solid #3a2a1a;
+            color: #d4a060;
+            padding: 10px 16px;
+            width: 200px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+            letter-spacing: 4px;
+        }
+
+        .arg-input:focus {
+            border-bottom-color: #8b5a00;
+        }
+
+        .arg-input::placeholder {
+            color: #4a3a2a;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        .submit-btn {
+            font-family: 'Special Elite', monospace;
+            font-size: 16px;
+            background: transparent;
+            border: 1px solid #3a2a1a;
+            color: #b8a080;
+            padding: 10px 30px;
             cursor: pointer;
-            font-weight: bold;
             transition: all 0.3s ease;
+            letter-spacing: 2px;
         }
 
-        .shuffle-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        .submit-btn:hover {
+            border-color: #8b5a00;
+            color: #d4a060;
+            box-shadow: 0 0 15px rgba(139, 90, 0, 0.2);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .fragment-reveal {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(24px, 5vw, 36px);
+            color: #8b0000;
+            text-shadow: 0 0 15px rgba(139, 0, 0, 0.5);
+            margin-top: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.6s ease;
         }
 
-        .heart {
-            font-size: 4em;
-            margin: 20px 0;
-            animation: heartbeat 1.5s ease-in-out infinite;
+        .fragment-reveal.show {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        @keyframes heartbeat {
+        .whisper-text {
+            font-family: 'Special Elite', monospace;
+            font-size: clamp(12px, 2.5vw, 16px);
+            color: #554433;
+            text-align: center;
+            max-width: 400px;
+            margin-top: 20px;
+            font-style: italic;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
 
-            0%,
-            100% {
-                transform: scale(1);
+        .whisper-text.show {
+            opacity: 1;
+        }
+
+        .continue-btn {
+            font-family: 'Special Elite', monospace;
+            font-size: 15px;
+            background: transparent;
+            border: 1px solid #3a2a1a;
+            color: #8b5a00;
+            padding: 10px 28px;
+            cursor: pointer;
+            margin-top: 24px;
+            opacity: 0;
+            transition: all 0.5s ease;
+            letter-spacing: 2px;
+        }
+
+        .continue-btn.show {
+            opacity: 1;
+        }
+
+        .continue-btn:hover {
+            border-color: #8b0000;
+            color: #8b0000;
+            box-shadow: 0 0 12px rgba(139, 0, 0, 0.2);
+        }
+
+        .error-flash {
+            animation: errorFlash 0.6s ease;
+        }
+
+        @keyframes errorFlash {
+            0% {
+                color: #b8a080;
             }
 
             25% {
-                transform: scale(1.1);
+                color: #ff0000;
             }
-        }
 
-        /* ─── Confetti & sparkles ─── */
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            pointer-events: none;
-        }
-
-        @keyframes confetti-fall {
-            to {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
+            50% {
+                color: #b8a080;
             }
-        }
 
-        .sparkle {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: sparkleAnim 1s ease-out;
-        }
-
-        @keyframes sparkleAnim {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
+            75% {
+                color: #ff0000;
             }
 
             100% {
-                transform: scale(1) rotate(180deg);
-                opacity: 0;
+                color: #b8a080;
             }
         }
 
-        @keyframes tileDisappear {
-            0% {
-                opacity: 1;
-                transform: scale(1) rotate(0deg);
-            }
+        /* ═══════════════════════════════════════
+           PHASE 3 — THE SCRAMBLE
+           ═══════════════════════════════════════ */
+        #phase3 {
+            background: radial-gradient(ellipse at center, #0d0810 0%, #080808 70%);
+        }
 
+        .scramble-title {
+            font-family: 'Creepster', cursive;
+            font-size: clamp(16px, 3.5vw, 22px);
+            color: #6644aa;
+            text-shadow: 0 0 15px rgba(102, 68, 170, 0.3);
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .scramble-tiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            max-width: 400px;
+            margin-bottom: 30px;
+        }
+
+        .scramble-tile {
+            width: 52px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Creepster', cursive;
+            font-size: 30px;
+            color: #8b0000;
+            background: rgba(20, 15, 25, 0.8);
+            border: 2px solid #2a1a3a;
+            border-radius: 6px;
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.4);
+            box-shadow: 0 0 12px rgba(102, 68, 170, 0.1), inset 0 0 10px rgba(0, 0, 0, 0.5);
+            animation: tileFloat 3s ease-in-out infinite;
+            cursor: default;
+            user-select: none;
+        }
+
+        .scramble-tile:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .scramble-tile:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        .scramble-tile:nth-child(4) {
+            animation-delay: 1.2s;
+        }
+
+        .scramble-tile:nth-child(5) {
+            animation-delay: 1.6s;
+        }
+
+        .scramble-tile:nth-child(6) {
+            animation-delay: 2.0s;
+        }
+
+        .scramble-tile:nth-child(7) {
+            animation-delay: 2.4s;
+        }
+
+        .scramble-tile:nth-child(8) {
+            animation-delay: 2.8s;
+        }
+
+        @keyframes tileFloat {
+
+            0%,
             100% {
-                opacity: 0;
-                transform: scale(0.5) rotate(180deg);
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
             }
         }
 
-        .tile-disappear {
-            animation: tileDisappear 0.5s ease forwards;
+        .scramble-instruction {
+            font-family: 'Special Elite', monospace;
+            font-size: clamp(13px, 2.5vw, 16px);
+            color: #554488;
+            text-align: center;
+            max-width: 400px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            font-style: italic;
         }
 
-        /* ─── Yes button ─── */
-        .yes-only-btn {
-            font-family: 'Quicksand', sans-serif;
-            font-size: 20px;
-            padding: 12px 32px;
-            background: linear-gradient(135deg, #FFDAE9 0%, #ffb6c1 100%);
+        .hint-timer {
+            font-family: 'Special Elite', monospace;
+            font-size: 13px;
             color: #333;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: 50px;
+            font-style: italic;
+            margin-top: 12px;
+            min-height: 1.5em;
+            transition: opacity 0.5s ease;
+        }
+
+        .input-group-mirror {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .arg-input-scramble {
+            font-family: 'Creepster', cursive;
+            font-size: 24px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #2a1a3a;
+            color: #8b0000;
+            padding: 10px 16px;
+            width: 280px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .arg-input-scramble:focus {
+            border-bottom-color: #6644aa;
+        }
+
+        .arg-input-scramble::placeholder {
+            color: #2a1a3a;
+            letter-spacing: 2px;
+            font-size: 14px;
+            text-transform: none;
+        }
+
+        .submit-btn-scramble {
+            font-family: 'Creepster', cursive;
+            font-size: 18px;
+            background: transparent;
+            border: 2px solid #2a1a3a;
+            color: #6644aa;
+            padding: 10px 30px;
             cursor: pointer;
-            margin-top: 8px;
-            font-weight: 600;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 2px 8px rgba(255, 105, 135, 0.2);
+            transition: all 0.3s ease;
+            letter-spacing: 3px;
         }
 
-        .yes-only-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 16px rgba(255, 105, 135, 0.35);
+        .submit-btn-scramble:hover {
+            border-color: #8b0000;
+            color: #8b0000;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.2);
         }
 
-        /* ─── Responsive ─── */
-        @media (max-width: 600px) {
-            body {
-                padding: 16px;
+        /* ═══════════════════════════════════════
+           PHASE 4 — THE DOOR
+           ═══════════════════════════════════════ */
+        #phase4 {
+            background: #0a0a0a;
+            perspective: 800px;
+        }
+
+        .door-container {
+            position: relative;
+            width: min(280px, 70vw);
+            height: min(420px, 65vh);
+            perspective: 800px;
+        }
+
+        .door-frame {
+            position: absolute;
+            inset: -12px;
+            border: 12px solid #1a1210;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .door {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #2a1f18, #1a1210);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transform-origin: left center;
+            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.3), inset 2px 0 5px rgba(255, 200, 150, 0.03);
+        }
+
+        .door.open {
+            transform: rotateY(-85deg);
+        }
+
+        /* Door panels */
+        .door-panel {
+            position: absolute;
+            left: 15%;
+            width: 70%;
+            height: 28%;
+            border: 3px solid #15100c;
+            border-radius: 2px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+        }
+
+        .door-panel:nth-child(1) {
+            top: 8%;
+        }
+
+        .door-panel:nth-child(2) {
+            top: 45%;
+        }
+
+        /* Keyhole */
+        .keyhole {
+            position: absolute;
+            right: 18%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+        }
+
+        .keyhole-circle {
+            width: 16px;
+            height: 16px;
+            background: #050505;
+            border-radius: 50%;
+            border: 2px solid #2a201a;
+            box-shadow: 0 0 8px rgba(139, 0, 0, 0.2);
+        }
+
+        .keyhole-slot {
+            width: 6px;
+            height: 14px;
+            background: #050505;
+            margin: -2px auto 0;
+            border-radius: 0 0 2px 2px;
+            border: 1px solid #2a201a;
+            border-top: none;
+        }
+
+        /* Light behind door */
+        .door-light {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(255, 220, 180, 0) 0%, transparent 100%);
+            border-radius: 4px 4px 0 0;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .door-light.show {
+            opacity: 1;
+            background: radial-gradient(ellipse at center, rgba(255, 220, 180, 0.8) 0%, rgba(255, 200, 150, 0.3) 50%, transparent 100%);
+        }
+
+        .door-text {
+            font-family: 'Special Elite', monospace;
+            font-size: clamp(14px, 3vw, 18px);
+            color: #665544;
+            text-align: center;
+            max-width: 450px;
+            margin-top: 30px;
+            line-height: 1.7;
+        }
+
+        .fragments-display {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            font-family: 'Creepster', cursive;
+            font-size: clamp(20px, 4vw, 28px);
+        }
+
+        .fragment-box {
+            padding: 8px 16px;
+            border: 2px solid #333;
+            color: #8b0000;
+            text-shadow: 0 0 8px rgba(139, 0, 0, 0.3);
+            letter-spacing: 3px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .fragment-box.empty {
+            color: #333;
+            border-style: dashed;
+        }
+
+        .fragment-plus {
+            color: #444;
+            font-size: 24px;
+        }
+
+        .door-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .arg-input-door {
+            font-family: 'Creepster', cursive;
+            font-size: 22px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            color: #8b0000;
+            padding: 10px 16px;
+            width: 280px;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s ease;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .arg-input-door:focus {
+            border-bottom-color: #8b0000;
+        }
+
+        .arg-input-door::placeholder {
+            color: #2a2a2a;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        .submit-btn-door {
+            font-family: 'Creepster', cursive;
+            font-size: 18px;
+            background: transparent;
+            border: 2px solid #333;
+            color: #665544;
+            padding: 12px 36px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 3px;
+        }
+
+        .submit-btn-door:hover {
+            border-color: #8b0000;
+            color: #8b0000;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.2);
+        }
+
+        /* ═══════════════════════════════════════
+           PHASE 5 — VIDEO REVEAL
+           ═══════════════════════════════════════ */
+        #phase5 {
+            background: #000;
+        }
+
+        .video-container {
+            position: relative;
+            width: 92vw;
+            height: 85vh;
+            max-width: 1000px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(139, 0, 0, 0.15), 0 0 120px rgba(139, 0, 0, 0.05);
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 8px;
+            object-fit: contain;
+            background: #000;
+        }
+
+        .video-glow {
+            position: absolute;
+            inset: -20px;
+            border-radius: 20px;
+            background: radial-gradient(ellipse at center, rgba(139, 0, 0, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+            animation: videoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes videoGlow {
+
+            0%,
+            100% {
+                opacity: 0.5;
             }
 
-            .container {
-                padding: 20px 36px;
-                max-width: 94%;
-                min-height: 420px;
-            }
-
-            .modal-view .modal-title {
-                font-size: 26px;
-            }
-
-            .puzzle-reveal-text .complete-line,
-            .puzzle-reveal-text .valentine-question {
-                font-size: 18px;
-            }
-
-            .yes-only-btn {
-                font-size: 18px;
-            }
-
-            .success-yay {
-                font-size: 20px;
-            }
-
-            .puzzle-container {
-                max-width: min(360px, 40vh);
+            50% {
+                opacity: 1;
             }
         }
 
-        @media (max-width: 420px) {
-            body {
-                padding: 12px;
-            }
-
-            .container {
-                padding: 16px 36px;
-                max-width: 96%;
-                min-height: 380px;
-            }
-
-            .modal-view .modal-title {
-                font-size: 22px;
-            }
-
-            .puzzle-reveal-text .complete-line,
-            .puzzle-reveal-text .valentine-question {
-                font-size: 16px;
-            }
-
-            .yes-only-btn {
-                font-size: 16px;
-            }
-
-            .success-yay {
-                font-size: 18px;
-            }
-
-            .puzzle-container {
-                max-width: min(280px, 40vh);
-            }
+        .white-flash {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 9998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        @media (max-width: 360px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                padding: 12px 36px;
-                min-height: 340px;
-            }
-
-            .modal-view .modal-title {
-                font-size: 20px;
-            }
-
-            .puzzle-reveal-text .complete-line,
-            .puzzle-reveal-text .valentine-question {
-                font-size: 14px;
-            }
-
-            .yes-only-btn {
-                font-size: 14px;
-            }
-
-            .success-yay {
-                font-size: 16px;
-            }
-
-            .puzzle-container {
-                max-width: min(240px, 40vh);
-            }
+        .white-flash.show {
+            opacity: 1;
         }
 
-        /* Short viewport */
-        @media (max-height: 800px) {
-            body {
-                padding: 14px;
+        /* ═══════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════ */
+        @media (max-width: 480px) {
+            .candle-container {
+                transform: scale(0.8);
+                margin-bottom: 16px;
             }
 
-            .container {
-                transform: scale(0.95);
-                transform-origin: center center;
-                padding: 22px 36px;
-            }
-        }
-
-        @media (max-height: 700px) {
-            body {
-                padding: 12px;
+            .mirror-frame {
+                width: min(280px, 85vw);
+                height: min(320px, 50vh);
             }
 
-            .container {
-                transform: scale(0.85);
-                transform-origin: center center;
-                padding: 20px 36px;
+            .door-container {
+                width: min(220px, 65vw);
+                height: min(340px, 55vh);
             }
         }
 
         @media (max-height: 600px) {
-            .container {
-                transform: scale(0.72);
-                padding: 16px 36px;
-            }
-        }
-
-        @media (max-height: 500px) {
-            .container {
+            .candle-container {
                 transform: scale(0.6);
-                padding: 12px 36px;
+                margin-bottom: 8px;
             }
-        }
 
-        @media (max-height: 420px) {
-            .container {
-                transform: scale(0.5);
-                padding: 10px 36px;
+            .mirror-frame {
+                height: min(250px, 40vh);
             }
-        }
 
-        @media (max-height: 600px) and (max-width: 480px) {
-            .container {
-                transform: scale(0.65);
-                padding: 12px 36px;
+            .door-container {
+                height: min(280px, 45vh);
             }
-        }
-
-        @media (max-height: 500px) and (max-width: 420px) {
-            .container {
-                transform: scale(0.55);
-                padding: 10px 36px;
-            }
-        }
-
-        /* ─── Success view ─── */
-        .container.container--success {
-            background: transparent;
-            box-shadow: none;
-            padding: 24px;
-        }
-
-        .success-yay {
-            font-family: 'Great Vibes', cursive;
-            font-size: 26px;
-            font-weight: 700;
-            color: #c41e3a;
-            margin-bottom: 20px;
-        }
-
-        .success-gif-wrap {
-            margin: 0 auto 24px;
-            border-radius: 14px;
-            overflow: hidden;
-            max-width: 420px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .success-gif-wrap img {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
-
-        .reset-btn {
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 0.85em;
-            cursor: pointer;
-            text-decoration: underline;
-            padding: 8px 12px;
-            margin-top: 8px;
-            font-family: inherit;
-        }
-
-        .reset-btn:hover {
-            color: #111;
         }
     </style>
 </head>
 
 <body>
-    <!-- Floating hearts background -->
-    <div class="floating-hearts" id="floatingHearts"></div>
 
-    <!-- ENVELOPE: no modal, just envelope on pink background -->
-    <div id="envelopeStage">
-        <div class="envelope-wrapper">
-            <div class="envelope" id="envelope">
-                <div class="envelope-heart" aria-hidden="true">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="envelope-flap">
-                    <svg class="envelope-flap-outline" viewBox="0 0 100 100" preserveAspectRatio="none"
-                        aria-hidden="true">
-                        <line x1="0" y1="0" x2="50" y2="50" stroke="#d4c4a8" stroke-width="3"
-                            vector-effect="non-scaling-stroke" />
-                        <line x1="50" y1="50" x2="100" y2="0" stroke="#d4c4a8" stroke-width="3"
-                            vector-effect="non-scaling-stroke" />
-                    </svg>
+    <!-- VHS static overlay -->
+    <div class="vhs-overlay"></div>
+
+    <!-- White flash for transitions -->
+    <div class="white-flash" id="whiteFlash"></div>
+
+    <!-- ═══════════════════════════════════════
+         PHASE 1 — CORRUPTED INTRO
+         ═══════════════════════════════════════ -->
+    <div class="phase active" id="phase1">
+        <div class="static-noise"></div>
+        <div class="intro-text" id="introText"></div>
+        <button class="start-btn" id="startBtn">INICIAR</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         PHASE 2 — THE RITUAL (Candle Puzzle)
+         ═══════════════════════════════════════ -->
+    <div class="phase" id="phase2">
+        <div class="candle-container">
+            <div class="candle-glow"></div>
+            <div class="flame-wrap">
+                <div class="flame" id="flame"></div>
+            </div>
+            <div class="candle-body"></div>
+        </div>
+
+        <p class="riddle-text" id="riddleText"></p>
+
+        <div class="input-group" id="riddleInputGroup">
+            <input type="text" class="arg-input" id="riddleInput" placeholder="..." maxlength="4" autocomplete="off">
+            <button class="submit-btn" id="riddleSubmit">Responder</button>
+        </div>
+
+        <div class="fragment-reveal" id="fragment1Reveal">Fragmento I: SAN</div>
+        <p class="whisper-text" id="whisperText">Bien... pero aun te falta encontrar lo que esta oculto...</p>
+        <button class="continue-btn" id="continueToPhase3">Continuar</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         PHASE 3 — THE SCRAMBLE (Unscramble Letters)
+         ═══════════════════════════════════════ -->
+    <div class="phase" id="phase3">
+        <p class="scramble-title" id="scrambleTitle">Las letras estan desordenadas...<br>Forma la palabra oculta.</p>
+
+        <div class="scramble-tiles" id="scrambleTiles"></div>
+
+        <p class="scramble-instruction" id="scrambleInstruction">Ordena las letras y escribe la palabra.</p>
+
+        <div class="input-group-mirror">
+            <input type="text" class="arg-input-scramble" id="scrambleInput" placeholder="la palabra..." maxlength="10"
+                autocomplete="off">
+            <button class="submit-btn-scramble" id="scrambleSubmit">Revelar</button>
+        </div>
+
+        <p class="hint-timer" id="hintTimer"></p>
+
+        <div class="fragment-reveal" id="fragment2Reveal">Fragmento II: VALENTIN</div>
+        <button class="continue-btn" id="continueToPhase4">Continuar</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════
+         PHASE 4 — THE DOOR (Final Code)
+         ═══════════════════════════════════════ -->
+    <div class="phase" id="phase4">
+        <div class="door-container">
+            <div class="door-frame"></div>
+            <div class="door-light" id="doorLight"></div>
+            <div class="door" id="door">
+                <div class="door-panel"></div>
+                <div class="door-panel"></div>
+                <div class="keyhole">
+                    <div class="keyhole-circle"></div>
+                    <div class="keyhole-slot"></div>
                 </div>
             </div>
-            <span class="envelope-tap-hint">Tócame 💌</span>
+        </div>
+
+        <p class="door-text">Combina los fragmentos.<br>Escribe el codigo completo.</p>
+
+        <div class="fragments-display">
+            <div class="fragment-box" id="fragBox1">SAN</div>
+            <span class="fragment-plus">+</span>
+            <div class="fragment-box" id="fragBox2">VALENTIN</div>
+        </div>
+
+        <div class="door-input-group">
+            <input type="text" class="arg-input-door" id="doorInput" placeholder="el codigo..." maxlength="12"
+                autocomplete="off">
+            <button class="submit-btn-door" id="doorSubmit">Abrir</button>
         </div>
     </div>
 
-    <div class="container">
-        <div class="modal-inner">
-            <!-- VIEW: Puzzle -->
-            <div id="puzzleView" class="modal-view">
-                <h1 class="modal-title" id="modalTitle"></h1>
-                <div class="puzzle-container" id="puzzleContainer">
-                    <div class="puzzle-grid-wrap" id="puzzleGridWrap">
-                        <div class="puzzle-grid" id="puzzleGrid"></div>
-                        <div class="puzzle-full-image-overlay" id="puzzleFullImageOverlay">
-                            <img src="images/full-image-square.jpg" alt="" />
-                        </div>
-                    </div>
-                    <div class="puzzle-toolbar">
-                        <span class="move-counter" id="moveCounter">Movimientos: 0</span>
-                        <button type="button" class="hint-btn" id="hintBtn">👁 Pista</button>
-                    </div>
-                </div>
-                <div class="puzzle-reveal-text" id="puzzleRevealText">
-                    <p class="complete-line">...¿Queres ser mi?.</p>
-                    <p class="valentine-question"> San Valentin 💕</p>
-                    <button type="button" class="yes-only-btn" id="yesBtn">Si</button>
-                </div>
-            </div>
-
-            <!-- VIEW: Success -->
-            <div id="successView" class="modal-view">
-                <p class="modal-title" style="opacity:1;">Te espero el 14 de febrero a las 7:00pm en mi casa para ver
-                    peliculas y comer pizza jiij</p>
-                <div class="success-gif-wrap">
-                    <img src="giphy.gif" alt="" />
-                </div>
-                <button type="button" class="reset-btn" id="resetBtn">Reset</button>
-            </div>
+    <!-- ═══════════════════════════════════════
+         PHASE 5 — VIDEO REVEAL
+         ═══════════════════════════════════════ -->
+    <div class="phase" id="phase5">
+        <div class="video-container" id="videoContainer">
+            <div class="video-glow"></div>
+            <video id="teAmoVideo" controls>
+                <source src="TeAmo.mp4" type="video/mp4">
+            </video>
         </div>
     </div>
 
+    <!-- ═══════════════════════════════════════
+         JAVASCRIPT
+         ═══════════════════════════════════════ -->
     <script>
-        // ─── Floating hearts ───
-        (function createFloatingHearts() {
-            const container = document.getElementById('floatingHearts');
-            const hearts = ['💕', '💗', '💖', '💓', '🩷', '♥', '❤️'];
-            for (let i = 0; i < 14; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'floating-heart';
-                heart.textContent = hearts[i % hearts.length];
-                heart.style.left = (Math.random() * 100) + '%';
-                heart.style.animationDuration = (6 + Math.random() * 8) + 's';
-                heart.style.animationDelay = (Math.random() * 10) + 's';
-                heart.style.fontSize = (14 + Math.random() * 18) + 'px';
-                container.appendChild(heart);
+        // ── State ──
+        let currentPhase = 1;
+        let audioCtx = null;
+        let ambientOsc = null;
+        let ambientGain = null;
+
+        // ── Sound Effects Engine (Web Audio API) ──
+        function getAudioCtx() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) { return null; }
             }
-        })();
+            return audioCtx;
+        }
 
-        // ─── Envelope → Modal ───
-        const envelopeStage = document.getElementById('envelopeStage');
-        const envelope = document.getElementById('envelope');
-        const puzzleGrid = document.getElementById('puzzleGrid');
-        const puzzleView = document.getElementById('puzzleView');
-        const successView = document.getElementById('successView');
+        function playSFX(type) {
+            const ctx = getAudioCtx();
+            if (!ctx) return;
+            const now = ctx.currentTime;
 
-        envelope.addEventListener('click', () => {
-            envelope.style.pointerEvents = 'none';
-            const heart = envelope.querySelector('.envelope-heart');
-            heart.classList.add('hidden');
-            // Hide tap hint
-            const hint = envelope.closest('.envelope-wrapper').querySelector('.envelope-tap-hint');
-            if (hint) hint.style.display = 'none';
+            if (type === 'correct') {
+                // Eerie success chord: two tones rising
+                [330, 440].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq * 0.5, now);
+                    osc.frequency.linearRampToValueAtTime(freq, now + 0.3);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.15);
+                    osc.stop(now + 1.5);
+                });
+            }
 
-            setTimeout(() => {
-                envelope.classList.add('opening');
+            if (type === 'wrong') {
+                // Harsh buzz
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(80, now);
+                osc.frequency.linearRampToValueAtTime(60, now + 0.3);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+
+            if (type === 'transition') {
+                // Whoosh sweep
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
+                gain.gain.setValueAtTime(0.06, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.7);
+            }
+
+            if (type === 'door') {
+                // Low creak effect
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                const lfo = ctx.createOscillator();
+                const lfoGain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(40, now);
+                osc.frequency.linearRampToValueAtTime(80, now + 1);
+                osc.frequency.linearRampToValueAtTime(35, now + 2);
+                lfo.frequency.setValueAtTime(6, now);
+                lfoGain.gain.setValueAtTime(15, now);
+                lfo.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.linearRampToValueAtTime(0.08, now + 0.8);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                lfo.start(now);
+                osc.start(now);
+                osc.stop(now + 3);
+                lfo.stop(now + 3);
+            }
+
+            if (type === 'reveal') {
+                // Bright chime for video reveal
+                [523, 659, 784].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + i * 0.2);
+                    gain.gain.setValueAtTime(0.07, now + i * 0.2);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.2 + 2);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + i * 0.2);
+                    osc.stop(now + i * 0.2 + 2.5);
+                });
+            }
+
+            if (type === 'typewriter') {
+                // Tiny click for each letter
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800 + Math.random() * 400, now);
+                gain.gain.setValueAtTime(0.015, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        }
+
+        // ── Ambient sound ──
+        function startAmbientSound() {
+            const ctx = getAudioCtx();
+            if (!ctx || ambientOsc) return;
+            try {
+                // Deep drone
+                ambientOsc = ctx.createOscillator();
+                ambientOsc.type = 'sine';
+                ambientOsc.frequency.setValueAtTime(55, ctx.currentTime);
+
+                ambientGain = ctx.createGain();
+                ambientGain.gain.setValueAtTime(0, ctx.currentTime);
+                ambientGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 3);
+
+                // Add subtle LFO modulation
+                const lfo = ctx.createOscillator();
+                lfo.type = 'sine';
+                lfo.frequency.setValueAtTime(0.3, ctx.currentTime);
+                const lfoGain = ctx.createGain();
+                lfoGain.gain.setValueAtTime(3, ctx.currentTime);
+                lfo.connect(lfoGain);
+                lfoGain.connect(ambientOsc.frequency);
+                lfo.start();
+
+                ambientOsc.connect(ambientGain);
+                ambientGain.connect(ctx.destination);
+                ambientOsc.start();
+            } catch (e) {
+                // Audio not supported — silent fail
+            }
+        }
+
+        function stopAmbientSound() {
+            if (ambientGain && audioCtx) {
+                ambientGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
                 setTimeout(() => {
-                    envelopeStage.classList.add('envelope-stage-fade-out');
-                    setTimeout(() => {
-                        envelopeStage.style.display = 'none';
-                        document.body.classList.add('show-modal');
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-                                puzzleView.classList.add('visible');
-                                startTypewriter();
-                            });
-                        });
-                    }, 450);
-                }, 700);
-            }, 380);
-        });
+                    if (ambientOsc) { try { ambientOsc.stop(); } catch (e) { } }
+                    ambientOsc = null;
+                    ambientGain = null;
+                }, 2500);
+            }
+        }
 
-        // ─── Typewriter effect ───
-        const TITLE_TEXT = 'Cindy...';
-        let typewriterDone = false;
+        // ── Phase transitions ──
+        function goToPhase(num) {
+            const current = document.getElementById('phase' + currentPhase);
+            const next = document.getElementById('phase' + num);
 
-        function startTypewriter() {
-            const titleEl = document.getElementById('modalTitle');
-            titleEl.innerHTML = '<span class="typewriter-cursor"></span>';
+            // Flicker effect
+            document.body.classList.add('screen-flicker');
+            setTimeout(() => document.body.classList.remove('screen-flicker'), 200);
+
+            current.classList.remove('active');
+            setTimeout(() => {
+                next.classList.add('active');
+                currentPhase = num;
+
+                if (num === 5) {
+                    stopAmbientSound();
+                }
+            }, 400);
+        }
+
+        function flashAndGo(num) {
+            const flash = document.getElementById('whiteFlash');
+            flash.classList.add('show');
+            setTimeout(() => {
+                flash.classList.remove('show');
+                goToPhase(num);
+            }, 300);
+        }
+
+        // ── Typewriter ──
+        function typewriter(element, text, speed = 65, callback) {
+            element.innerHTML = '<span class="cursor-blink"></span>';
             let i = 0;
-
             const interval = setInterval(() => {
-                if (i < TITLE_TEXT.length) {
-                    titleEl.innerHTML = TITLE_TEXT.substring(0, i + 1) + '<span class="typewriter-cursor"></span>';
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1) + '<span class="cursor-blink"></span>';
+                    playSFX('typewriter');
                     i++;
                 } else {
                     clearInterval(interval);
-                    typewriterDone = true;
-                    // Remove cursor after a moment
                     setTimeout(() => {
-                        const cursor = titleEl.querySelector('.typewriter-cursor');
-                        if (cursor) cursor.remove();
+                        const cursor = element.querySelector('.cursor-blink');
+                        if (cursor) cursor.style.animation = 'cursorBlink 0.7s step-end infinite';
+                    }, 500);
+                    if (callback) setTimeout(callback, 800);
+                }
+            }, speed);
+        }
+
+        // ═══════════════════════════════
+        //  PHASE 1 — CORRUPTED INTRO
+        // ═══════════════════════════════
+        (function initPhase1() {
+            const introText = document.getElementById('introText');
+            const startBtn = document.getElementById('startBtn');
+
+            setTimeout(() => {
+                typewriter(introText, 'Todos tienen el 14 de febrero. Nosotros tenemos algo mejor...', 70, () => {
+                    startBtn.classList.add('show');
+                });
+            }, 1000);
+
+            startBtn.addEventListener('click', () => {
+                startAmbientSound();
+                playSFX('transition');
+                flashAndGo(2);
+                setTimeout(initPhase2Typewriter, 1200);
+            });
+        })();
+
+        // ═══════════════════════════════
+        //  PHASE 2 — THE RITUAL
+        // ═══════════════════════════════
+        function initPhase2Typewriter() {
+            const riddleText = document.getElementById('riddleText');
+            typewriter(riddleText,
+                'Todos tienen el 14 de febrero. Nosotros tenemos algo mejor. Cual es nuestro numero?',
+                50
+            );
+        }
+
+        (function initPhase2() {
+            const input = document.getElementById('riddleInput');
+            const submit = document.getElementById('riddleSubmit');
+            const fragment = document.getElementById('fragment1Reveal');
+            const whisper = document.getElementById('whisperText');
+            const continueBtn = document.getElementById('continueToPhase3');
+            const inputGroup = document.getElementById('riddleInputGroup');
+            const flame = document.getElementById('flame');
+            const riddleText = document.getElementById('riddleText');
+
+            function checkAnswer() {
+                const answer = input.value.trim();
+                if (answer === '19') {
+                    // Correct!
+                    playSFX('correct');
+                    inputGroup.style.display = 'none';
+
+                    // Flame flare
+                    flame.classList.add('flare');
+                    setTimeout(() => flame.classList.remove('flare'), 1500);
+
+                    // Show fragment
+                    setTimeout(() => {
+                        fragment.classList.add('show');
+                    }, 600);
+
+                    // Show whisper
+                    setTimeout(() => {
+                        whisper.classList.add('show');
+                    }, 1800);
+
+                    // Show continue
+                    setTimeout(() => {
+                        continueBtn.classList.add('show');
+                    }, 3000);
+
+                } else {
+                    // Wrong — shake + flash
+                    playSFX('wrong');
+                    document.body.classList.add('screen-shake');
+                    riddleText.classList.add('error-flash');
+                    input.value = '';
+                    setTimeout(() => {
+                        document.body.classList.remove('screen-shake');
+                        riddleText.classList.remove('error-flash');
+                    }, 600);
+                }
+            }
+
+            submit.addEventListener('click', checkAnswer);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') checkAnswer();
+            });
+
+            continueBtn.addEventListener('click', () => {
+                playSFX('transition');
+                flashAndGo(3);
+                setTimeout(initPhase3Scramble, 800);
+            });
+        })();
+
+        // ═══════════════════════════════
+        //  PHASE 3 — THE SCRAMBLE
+        // ═══════════════════════════════
+        let phase3Initialized = false;
+
+        function initPhase3Scramble() {
+            if (phase3Initialized) return;
+            phase3Initialized = true;
+
+            // Scramble the letters of VALENTIN
+            const word = 'VALENTIN';
+            const letters = word.split('');
+            // Fisher-Yates shuffle
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
+            // Make sure it's actually scrambled
+            if (letters.join('') === word) {
+                [letters[0], letters[letters.length - 1]] = [letters[letters.length - 1], letters[0]];
+            }
+
+            const tilesContainer = document.getElementById('scrambleTiles');
+            letters.forEach((letter, idx) => {
+                const tile = document.createElement('div');
+                tile.className = 'scramble-tile';
+                tile.textContent = letter;
+                tile.style.animationDelay = (idx * 0.3) + 's';
+                tilesContainer.appendChild(tile);
+            });
+
+            // Show hint after 15 seconds
+            const hintEl = document.getElementById('hintTimer');
+            let seconds = 15;
+            const countdown = setInterval(() => {
+                seconds--;
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                    hintEl.textContent = 'Piensa en el dia de los enamorados... San ___?';
+                    hintEl.style.opacity = '1';
+                }
+            }, 1000);
+        }
+
+        (function initPhase3() {
+            const input = document.getElementById('scrambleInput');
+            const submit = document.getElementById('scrambleSubmit');
+            const fragment = document.getElementById('fragment2Reveal');
+            const continueBtn = document.getElementById('continueToPhase4');
+            const inputGroup = input.closest('.input-group-mirror');
+            const instruction = document.getElementById('scrambleInstruction');
+
+            function checkAnswer() {
+                const answer = input.value.trim().toUpperCase();
+                if (answer === 'VALENTIN') {
+                    // Correct!
+                    playSFX('correct');
+                    inputGroup.style.display = 'none';
+                    instruction.style.display = 'none';
+                    document.getElementById('hintTimer').style.display = 'none';
+                    document.getElementById('scrambleTiles').style.display = 'none';
+                    document.getElementById('scrambleTitle').style.display = 'none';
+
+                    setTimeout(() => {
+                        fragment.classList.add('show');
+                    }, 400);
+
+                    setTimeout(() => {
+                        continueBtn.classList.add('show');
                     }, 1500);
-                }
-            }, 120);
-        }
 
-        // ─── Puzzle state ───
-        let tiles = [];
-        let moveCount = 0;
-
-        const EMPTY_PIECE = 3;
-        const solution = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        let currentState = [...solution];
-        let puzzleSolved = false;
-
-        function initPuzzle() {
-            scramblePuzzle();
-            renderPuzzle();
-        }
-
-        function scramblePuzzle() {
-            for (let i = 0; i < 10; i++) {
-                const emptyIndex = currentState.indexOf(EMPTY_PIECE);
-                const validMoves = getValidMoves(emptyIndex);
-                const randomMove = validMoves[Math.floor(Math.random() * validMoves.length)];
-                [currentState[emptyIndex], currentState[randomMove]] = [currentState[randomMove], currentState[emptyIndex]];
-            }
-        }
-
-        function getValidMoves(emptyIndex) {
-            const validMoves = [];
-            const row = Math.floor(emptyIndex / 3);
-            const col = emptyIndex % 3;
-            if (row > 0) validMoves.push(emptyIndex - 3);
-            if (row < 2) validMoves.push(emptyIndex + 3);
-            if (col > 0) validMoves.push(emptyIndex - 1);
-            if (col < 2) validMoves.push(emptyIndex + 1);
-            return validMoves;
-        }
-
-        // Calculate position for a grid index
-        function getTilePosition(index) {
-            const col = index % 3;
-            const row = Math.floor(index / 3);
-            const gap = 2; // px gap between tiles
-            // Each tile is ~33.333% minus gap; offset by col/row
-            return {
-                left: `calc(${col * 33.333}% + ${col * gap / 3}px)`,
-                top: `calc(${row * 33.333}% + ${row * gap / 3}px)`
-            };
-        }
-
-        function renderPuzzle() {
-            // Create tiles only once, then reposition
-            if (tiles.length === 0) {
-                puzzleGrid.innerHTML = '';
-                // Create 9 tile elements (one per piece number)
-                for (let piece = 1; piece <= 9; piece++) {
-                    const tile = document.createElement('div');
-                    tile.className = 'puzzle-tile';
-                    tile.dataset.piece = piece;
-
-                    if (piece === EMPTY_PIECE) {
-                        tile.classList.add('empty');
-                    } else {
-                        tile.style.backgroundImage = `url('images/tile-${piece}.jpg')`;
-                    }
-
-                    tile.addEventListener('click', () => {
-                        if (puzzleSolved) return;
-                        const currentIndex = currentState.indexOf(piece);
-                        moveTile(currentIndex);
-                    });
-
-                    puzzleGrid.appendChild(tile);
-                    tiles.push(tile);
+                } else {
+                    // Wrong
+                    playSFX('wrong');
+                    document.body.classList.add('screen-shake');
+                    input.value = '';
+                    setTimeout(() => {
+                        document.body.classList.remove('screen-shake');
+                    }, 500);
                 }
             }
 
-            // Position each tile based on currentState
-            currentState.forEach((piece, index) => {
-                const tile = tiles[piece - 1]; // tiles array is 0-indexed by piece number
-                const pos = getTilePosition(index);
-                tile.style.left = pos.left;
-                tile.style.top = pos.top;
-            });
-        }
-
-        function moveTile(index) {
-            const emptyIndex = currentState.indexOf(EMPTY_PIECE);
-            const validMoves = getValidMoves(emptyIndex);
-
-            if (validMoves.includes(index)) {
-                [currentState[emptyIndex], currentState[index]] = [currentState[index], currentState[emptyIndex]];
-
-                moveCount++;
-                document.getElementById('moveCounter').textContent = `Movimientos: ${moveCount}`;
-
-                renderPuzzle(); // Just repositions, no DOM recreation
-
-                if (isPuzzleSolved()) {
-                    puzzleSolved = true;
-                    setTimeout(onPuzzleSolved, 350);
-                }
-            }
-        }
-
-        function isPuzzleSolved() {
-            return currentState.every((tile, index) => tile === solution[index]);
-        }
-
-        function onPuzzleSolved() {
-            const puzzleContainer = document.getElementById('puzzleContainer');
-            const puzzleGridWrap = document.getElementById('puzzleGridWrap');
-            const puzzleRevealText = document.getElementById('puzzleRevealText');
-            const puzzleFullImageOverlay = document.getElementById('puzzleFullImageOverlay');
-
-            // Show the empty tile's image
-            const emptyTile = tiles[EMPTY_PIECE - 1];
-            if (emptyTile) {
-                emptyTile.style.backgroundImage = "url('images/tile-3.jpg')";
-                emptyTile.classList.remove('empty');
-            }
-
-            // Hide toolbar
-            document.querySelector('.puzzle-toolbar').style.display = 'none';
-
-            puzzleContainer.classList.add('completed');
-
-            // Remove gaps by setting all tiles flush
-            tiles.forEach(t => {
-                t.style.borderRadius = '0';
-                t.style.boxShadow = 'none';
+            submit.addEventListener('click', checkAnswer);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') checkAnswer();
             });
 
-            setTimeout(() => {
-                puzzleFullImageOverlay.classList.add('show');
-                setTimeout(() => {
-                    puzzleGridWrap.classList.add('revealing');
-                    puzzleRevealText.classList.add('show');
-                }, 250);
-            }, 280);
-        }
-
-        // ─── Hint button ───
-        document.getElementById('hintBtn').addEventListener('click', function () {
-            if (puzzleSolved) return;
-            const overlay = document.getElementById('puzzleFullImageOverlay');
-            const btn = this;
-            btn.disabled = true;
-            overlay.classList.add('show');
-            setTimeout(() => {
-                overlay.classList.remove('show');
-                btn.disabled = false;
-            }, 2000);
-        });
-
-        // ─── Sparkles ───
-        function createSparkles(x, y) {
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => {
-                    const sparkle = document.createElement('div');
-                    sparkle.className = 'sparkle';
-                    sparkle.style.left = x + (Math.random() - 0.5) * 50 + 'px';
-                    sparkle.style.top = y + (Math.random() - 0.5) * 50 + 'px';
-                    sparkle.style.background = ['#f093fb', '#f5576c', '#ffd700'][Math.floor(Math.random() * 3)];
-                    document.body.appendChild(sparkle);
-                    setTimeout(() => sparkle.remove(), 1000);
-                }, i * 50);
-            }
-        }
-
-        // ─── Init ───
-        initPuzzle();
-
-        // ─── Yes button → Success ───
-        const container = document.querySelector('.container');
-        document.getElementById('yesBtn').addEventListener('click', () => {
-            runConfettiFor(10000);
-            container.classList.add('container--success');
-            puzzleView.classList.remove('visible');
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => successView.classList.add('visible'));
+            continueBtn.addEventListener('click', () => {
+                playSFX('transition');
+                flashAndGo(4);
             });
-        });
+        })();
 
-        // ─── Reset ───
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            window.location.reload();
-        });
+        // ═══════════════════════════════
+        //  PHASE 4 — THE DOOR
+        // ═══════════════════════════════
+        (function initPhase4() {
+            const input = document.getElementById('doorInput');
+            const submit = document.getElementById('doorSubmit');
+            const door = document.getElementById('door');
+            const doorLight = document.getElementById('doorLight');
 
-        // ─── Confetti ───
-        function runConfettiFor(ms) {
-            const end = Date.now() + ms;
-            function tick() {
-                if (Date.now() < end) {
-                    createConfetti();
-                    setTimeout(tick, 80);
+            function checkAnswer() {
+                const answer = input.value.trim().toUpperCase();
+                if (answer === 'SANVALENTIN') {
+                    // Correct! Open the door
+                    playSFX('door');
+                    submit.style.display = 'none';
+                    input.style.display = 'none';
+                    document.querySelector('.door-text').style.display = 'none';
+                    document.querySelector('.fragments-display').style.display = 'none';
+
+                    doorLight.classList.add('show');
+                    setTimeout(() => {
+                        door.classList.add('open');
+                    }, 500);
+
+                    // Flash to video
+                    setTimeout(() => {
+                        const flash = document.getElementById('whiteFlash');
+                        flash.classList.add('show');
+                        setTimeout(() => {
+                            goToPhase(5);
+                            setTimeout(() => {
+                                flash.classList.remove('show');
+                                playSFX('reveal');
+                                const videoContainer = document.getElementById('videoContainer');
+                                videoContainer.classList.add('show');
+                                // Auto-play video
+                                const video = document.getElementById('teAmoVideo');
+                                video.play().catch(() => { });
+                            }, 600);
+                        }, 1000);
+                    }, 2500);
+
+                } else {
+                    // Wrong — shake + flicker
+                    playSFX('wrong');
+                    document.body.classList.add('screen-shake');
+                    input.value = '';
+                    setTimeout(() => {
+                        document.body.classList.remove('screen-shake');
+                    }, 500);
                 }
             }
-            tick();
-        }
 
-        function createConfetti() {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.top = '-10px';
-            confetti.style.background = ['#f093fb', '#f5576c', '#ffd700', '#4facfe', '#FFDAE9'][Math.floor(Math.random() * 5)];
-            const size = 6 + Math.random() * 8;
-            confetti.style.width = size + 'px';
-            confetti.style.height = size + 'px';
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-            const duration = 2 + Math.random() * 2;
-            confetti.style.animation = `confetti-fall ${duration}s linear`;
-            document.body.appendChild(confetti);
-            setTimeout(() => confetti.remove(), (duration + 0.5) * 1000);
-        }
+            submit.addEventListener('click', checkAnswer);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') checkAnswer();
+            });
+        })();
     </script>
 </body>
 
